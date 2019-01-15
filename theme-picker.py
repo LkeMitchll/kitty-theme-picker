@@ -1,9 +1,10 @@
 """ Allows a user to select a theme from several conf files """
 import sys
 import string
-from os.path import join
+from os.path import join, expanduser
 import glob
 
+from kitty.cli import parse_args
 from kitty.cmds import cmap, parse_subcommand_cli
 from kitty.constants import version
 from kitty.remote_control import encode_send, parse_rc_args
@@ -21,17 +22,18 @@ class Theme(Handler):
 
     print_on_fail = None
 
-    def __init__(self):
+    def __init__(self, opts):
+        self.opts = opts
         self.global_opts = parse_rc_args(["kitty", "@set-colors", "-a", "-c"])[0]
         self.letters = join(string.digits, string.ascii_uppercase)
-        self.themes = self.listdir_nohidden("/Users/Luke/.config/kitty/colors/")
+        self.themes = self.listdir_nohidden(self.opts.theme_path)
         self.theme_dict = {}
 
         for i in range(len(self.themes)):
             self.theme_dict[self.letters[i]] = self.themes[i]
 
     def listdir_nohidden(self, path):
-        return glob.glob(join(path, "*"))
+        return glob.glob(join(expanduser(path), "*"))
 
     def initialize(self):
         """ Set vars and call initial function """
@@ -44,7 +46,7 @@ class Theme(Handler):
             styled("Available Colorschemes:", bold=True, fg="gray", fg_intense=True)
         )
         self.print()
-        self.print(styled("~/.conf/kitty/colors/..", fg="gray"))
+        self.print(styled(self.opts.theme_path, fg="gray"))
         self.print()
         for i in range(len(self.themes)):
             self.print(
@@ -88,10 +90,25 @@ class Theme(Handler):
         self.write(encode_send(send))
 
 
+OPTIONS = r"""
+--theme_path
+default=~/.config/kitty/colors/
+type=str
+""".format
+
+
 def main(args):
     """ Entry point of the script """
+    msg = "Choose a theme"
+    try:
+        args, items = parse_args(args[1:], OPTIONS, "", msg, "theme_picker")
+    except SystemExit as e:
+        if e.code != 0:
+            print(e.args[0], file=sys.stderr)
+            input("Press ESC to quit")
+        return
     loop = Loop()
-    handler = Theme()
+    handler = Theme(args)
     loop.loop(handler)
     if handler.print_on_fail:
         print(handler.print_on_fail, file=sys.stderr)

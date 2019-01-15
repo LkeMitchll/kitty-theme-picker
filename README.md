@@ -14,12 +14,18 @@ cp theme-picker.py ~/.config/kitty/
 Add a line to `kitty.conf` like so:
 
 ```
-map ctrl+shift+t kitten theme.py
+map ctrl+shift+t kitten theme-picker.py --theme-dir ~/.config/kitty/colors/
+```
+
+You can manually invoke the kitten with:
+
+```
+kitty @ kitten theme-picker.py --theme-dir ~/.config/kitty/colors/
 ```
 
 ## Themes
 
-Currently kitty-theme-picker searches the `~/.config/kitty/colors` for theme `.conf` files. If this folder does not exist on your system, please create it. An example theme should look like this:
+Currently kitty-theme-picker searches the `~/.config/kitty/colors` folder by default for theme `.conf` files. If this folder does not exist on your system, please create it. An example theme should look like this:
 
 ``` conf
 # Tab bar colors and styles
@@ -48,8 +54,3 @@ color9       #ef5d32
 ```
 
 [kitty]: https://github.com/kovidgoyal/kitty
-
-### TODO
-
-- [ ] Configurable theme dir
-- [ ] Work out how to code more letter selections
