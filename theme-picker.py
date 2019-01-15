@@ -1,12 +1,13 @@
 """ Allows a user to select a theme from several conf files """
 import sys
+import string
 from os.path import join
 import glob
 
 from kitty.cmds import cmap, parse_subcommand_cli
 from kitty.constants import version
 from kitty.remote_control import encode_send, parse_rc_args
-from kitty.key_encoding import ESCAPE, RELEASE, A, B, C, D, E, F, G, H
+from kitty.key_encoding import ESCAPE, RELEASE
 
 from kittens.tui.loop import Loop
 from kittens.tui.handler import Handler
@@ -22,7 +23,7 @@ class Theme(Handler):
 
     def __init__(self):
         self.global_opts = parse_rc_args(["kitty", "@set-colors", "-a", "-c"])[0]
-        self.letters = ["A", "B", "C", "D", "E", "F", "G", "H"]
+        self.letters = join(string.digits, string.ascii_uppercase)
         self.themes = self.listdir_nohidden("/Users/Luke/.config/kitty/colors/")
         self.theme_dict = {}
 
@@ -58,7 +59,7 @@ class Theme(Handler):
     def on_text(self, text, in_bracketed_paste=False):
         """ Detects if key press is a valid theme """
         text = text.upper()
-        if text in "ABCDEFGH":
+        if text in self.letters:
             self.pick_theme(key=text)
 
     def on_key(self, key_event):
