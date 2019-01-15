@@ -33,6 +33,7 @@ class Theme(Handler):
             self.theme_dict[self.letters[i]] = self.themes[i]
 
     def listdir_nohidden(self, path):
+        """ Get theme dir files, excluding hidden files """
         return glob.glob(join(expanduser(path), "*"))
 
     def initialize(self):
