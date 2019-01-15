@@ -1,7 +1,7 @@
 """ Allows a user to select a theme from several conf files """
 import sys
-from os import listdir
-from os.path import expanduser
+from os.path import join
+import glob
 
 from kitty.cmds import cmap, parse_subcommand_cli
 from kitty.constants import version
@@ -23,11 +23,14 @@ class Theme(Handler):
     def __init__(self):
         self.global_opts = parse_rc_args(["kitty", "@set-colors", "-a", "-c"])[0]
         self.letters = ["A", "B", "C", "D", "E", "F", "G", "H"]
-        self.themes = listdir("/Users/Luke/.config/kitty/colors/")
+        self.themes = self.listdir_nohidden("/Users/Luke/.config/kitty/colors/")
         self.theme_dict = {}
 
         for i in range(len(self.themes)):
             self.theme_dict[self.letters[i]] = self.themes[i]
+
+    def listdir_nohidden(self, path):
+        return glob.glob(join(path, "*"))
 
     def initialize(self):
         """ Set vars and call initial function """
@@ -36,15 +39,17 @@ class Theme(Handler):
     def draw_screen(self):
         """ Draws the UI """
         self.cmd.clear_screen()
-        self.print(styled('Available Colorschemes:', bold=True, fg='gray', fg_intense=True))
+        self.print(
+            styled("Available Colorschemes:", bold=True, fg="gray", fg_intense=True)
+        )
         self.print()
-        self.print(styled('~/.conf/kitty/colors/..', fg='gray'))
+        self.print(styled("~/.conf/kitty/colors/..", fg="gray"))
         self.print()
         for i in range(len(self.themes)):
             self.print(
                 "  {} {}".format(
                     styled(self.letters[i], fg="green"),
-                    styled(self.themes[i].split(".", 1)[0], fg="blue"),
+                    styled(self.themes[i].split("/")[-1].split(".")[0], fg="blue"),
                 )
             )
         self.print()
@@ -70,9 +75,7 @@ class Theme(Handler):
     def change_theme(self, theme_name):
         """ Performs the theme change """
         set_colors = cmap["set-colors"]
-        theme_dir = expanduser("~/.config/kitty/colors")
-        theme_path = "%s/%s" % (theme_dir, theme_name)
-        cmdline = [set_colors.name, "-a", "-c", theme_path]
+        cmdline = [set_colors.name, "-a", "-c", theme_name]
         opts, items = parse_subcommand_cli(set_colors, cmdline)
         payload = set_colors(self.global_opts, opts, items)
         send = {
