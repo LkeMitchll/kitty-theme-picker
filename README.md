@@ -5,27 +5,27 @@ The plugin allows previewing and picking from a list of user colorschemes.
 
 ## Installation
 
-Copy `theme-picker.py` to `~/.config/kitty/`. e.g.
+Copy `theme_picker.py` to `~/.config/kitty/`. e.g.
 
 ```
-cp theme-picker.py ~/.config/kitty/
+cp theme_picker.py ~/.config/kitty/
 ```
 
 Add a line to `kitty.conf` like so:
 
 ```
-map ctrl+shift+t kitten theme-picker.py --theme-dir ~/.config/kitty/colors/
+map ctrl+shift+t kitten theme_picker.py --theme-dir ~/.config/kitty/colors/
 ```
 
 You can manually invoke the kitten with:
 
 ```
-kitty @ kitten theme-picker.py --theme-dir ~/.config/kitty/colors/
+kitty @ kitten theme_picker.py --theme-dir ~/.config/kitty/colors/
 ```
 
 ## Themes
 
-Currently kitty-theme-picker searches the `~/.config/kitty/colors` folder by default for theme `.conf` files. If this folder does not exist on your system, please create it. An example theme should look like this:
+Currently kitty-theme_picker searches the `~/.config/kitty/colors` folder by default for theme `.conf` files. If this folder does not exist on your system, please create it. An example theme should look like this:
 
 ``` conf
 # Tab bar colors and styles
