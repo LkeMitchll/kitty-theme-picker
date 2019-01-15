@@ -48,3 +48,8 @@ color9       #ef5d32
 ```
 
 [kitty]: https://github.com/kovidgoyal/kitty
+
+### TODO
+
+- [ ] Configurable theme dir
+- [ ] Work out how to code more letter selections
