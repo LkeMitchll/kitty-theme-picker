@@ -27,6 +27,7 @@ class Theme(Handler):
         self.global_opts = parse_rc_args(["kitty", "@set-colors", "-a", "-c"])[0]
         self.letters = join(string.digits, string.ascii_uppercase)
         self.themes = self.listdir_nohidden(self.opts.theme_path)
+        self.available_letters = self.letters[: len(self.themes)]
         self.theme_dict = {}
 
         for i in range(len(self.themes)):
@@ -62,7 +63,7 @@ class Theme(Handler):
     def on_text(self, text, in_bracketed_paste=False):
         """ Detects if key press is a valid theme """
         text = text.upper()
-        if text in self.letters:
+        if text in self.available_letters:
             self.pick_theme(key=text)
 
     def on_key(self, key_event):
