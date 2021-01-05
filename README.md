@@ -14,13 +14,13 @@ cp theme_picker.py ~/.config/kitty/
 Add a line to `kitty.conf` like so:
 
 ```
-map ctrl+shift+t kitten theme_picker.py --theme-dir ~/.config/kitty/colors/
+map ctrl+shift+t kitten theme_picker.py --theme_path ~/.config/kitty/colors/
 ```
 
 You can manually invoke the kitten with:
 
 ```
-kitty @ kitten theme_picker.py --theme-dir ~/.config/kitty/colors/
+kitty @ kitten theme_picker.py --theme_path ~/.config/kitty/colors/
 ```
 
 ## Themes
