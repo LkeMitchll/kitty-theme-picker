@@ -2,6 +2,7 @@
 import sys
 import string
 from os.path import join, expanduser
+from os import symlink, remove
 import glob
 
 from kitty.cli import parse_args
@@ -90,6 +91,8 @@ class Theme(Handler):
             "no_response": False,
         }
         self.write(encode_send(send))
+        remove(expanduser("~/.config/kitty/colors.conf"))
+        symlink(theme_name, expanduser("~/.config/kitty/colors.conf"))
 
 
 OPTIONS = r"""

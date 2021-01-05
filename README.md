@@ -11,9 +11,10 @@ Copy `theme_picker.py` to `~/.config/kitty/`. e.g.
 cp theme_picker.py ~/.config/kitty/
 ```
 
-Add a line to `kitty.conf` like so:
+Add the following lines to `kitty.conf`:
 
 ```
+include colors.conf
 map ctrl+shift+t kitten theme_picker.py --theme_path ~/.config/kitty/colors/
 ```
 
