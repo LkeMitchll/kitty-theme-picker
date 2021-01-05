@@ -5,10 +5,10 @@ from os.path import join, expanduser
 import glob
 
 from kitty.cli import parse_args
-from kitty.cmds import cmap, parse_subcommand_cli
 from kitty.constants import version
 from kitty.remote_control import encode_send, parse_rc_args
 from kitty.key_encoding import ESCAPE, RELEASE
+from kitty.rc.base import command_for_name, parse_subcommand_cli
 
 from kittens.tui.loop import Loop
 from kittens.tui.handler import Handler
@@ -79,10 +79,10 @@ class Theme(Handler):
 
     def change_theme(self, theme_name):
         """ Performs the theme change """
-        set_colors = cmap["set-colors"]
+        set_colors = command_for_name("set_colors")
         cmdline = [set_colors.name, "-a", "-c", theme_name]
         opts, items = parse_subcommand_cli(set_colors, cmdline)
-        payload = set_colors(self.global_opts, opts, items)
+        payload = set_colors.message_to_kitty(self.global_opts, opts, items)
         send = {
             "cmd": set_colors.name,
             "version": version,
